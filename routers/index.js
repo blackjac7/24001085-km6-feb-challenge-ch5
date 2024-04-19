@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const authRouter = require("./auth");
 const carRouter = require("./car");
 const optionRouter = require("./option");
 const specRouter = require("./spec");
 const carOptionRouter = require("./car_option");
 const carSpecRouter = require("./car_spec");
 
+router.use("/auth", authRouter);
 router.use("/cars", carRouter);
 router.use("/options", optionRouter);
 router.use("/specs", specRouter);

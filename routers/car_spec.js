@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const carSpecController = require("../controllers/car_spec");
+const { authMiddleware } = require("../middlewares/auth");
 
 router
     .route("/")
-    .get(carSpecController.getAllCarSpecs)
-    .post(carSpecController.createCarSpec);
+    .get(authMiddleware(["admin", "user"]), carSpecController.getAllCarSpecs)
+    .post(authMiddleware(["admin"]), carSpecController.createCarSpec);
 
 router
     .route("/:id")
-    .get(carSpecController.getCarSpecById)
-    .put(carSpecController.updateCarSpec)
-    .delete(carSpecController.deleteCarSpec);
+    .get(authMiddleware(["admin", "user"]), carSpecController.getCarSpecById)
+    .put(authMiddleware(["admin"]), carSpecController.updateCarSpec)
+    .delete(authMiddleware(["admin"]), carSpecController.deleteCarSpec);
 
 module.exports = router;
