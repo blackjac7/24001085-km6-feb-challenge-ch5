@@ -49,6 +49,24 @@ exports.getSpecByName = async (name) => {
 };
 
 exports.createSpec = async (payload) => {
+    const existingSpec = await Spec.findOne({
+        where: {
+            name: payload.name,
+        },
+        paranoid: false, // ini akan mencari juga di data yang telah di-soft delete
+    });
+
+    if (existingSpec) {
+        // Jika data sudah ada dan telah di-soft delete, maka kembalikan data tersebut
+        if (existingSpec.deletedAt) {
+            await existingSpec.restore();
+
+            const key = `option:${existingSpec.id}`;
+            await saveToCache(key, existingSpec, 300);
+
+            return existingSpec;
+        }
+    }
     const data = await Spec.create(payload);
 
     const key = `spec:${data.id}`;

@@ -8,7 +8,6 @@ router
     .route("/:id")
     .get(carController.getCarById)
     .put(carController.updateCar)
-    .patch(carController.updateCar)
     .delete(carController.deleteCar);
 
 router.route("/:id/options").get(carController.getAllCarOptions);

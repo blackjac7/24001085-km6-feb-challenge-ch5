@@ -114,6 +114,17 @@ exports.createCar = async (payload) => {
 };
 
 exports.updateCar = async (id, payload) => {
+    if (payload.image) {
+        const { image } = payload;
+
+        image.publicId = crypto.randomBytes(16).toString("hex");
+
+        image.name = `${image.publicId}${path.parse(image.name).ext}`;
+
+        const imageUpload = await uploader(image);
+        payload.image = imageUpload.secure_url;
+    }
+
     const opt = {
         where: { id },
         returning: true,

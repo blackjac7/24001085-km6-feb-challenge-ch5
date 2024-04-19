@@ -43,7 +43,9 @@ exports.updateCar = async (id, payload) => {
     await carRepo.getCarById(id);
 
     if (payload.plate) {
+        console.log("payload.plate", payload.plate);
         const existingCar = await carRepo.getCarByPlate(payload.plate);
+        console.log("existingCar", existingCar);
         if (existingCar && existingCar.id !== id) {
             throw {
                 statusCode: 400,

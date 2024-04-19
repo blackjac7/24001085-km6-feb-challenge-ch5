@@ -21,7 +21,6 @@ exports.createOption = async (payload) => {
             message: `Option with name ${payload.name} already exists`,
         };
     }
-
     const data = await optionRepo.createOption(payload);
 
     return data;

@@ -73,8 +73,8 @@ exports.getAllCarSpecs = async (req, res, next) => {
 
 exports.createCar = async (req, res, next) => {
     try {
-        let payload = req.body;
-        const { image } = req.files;
+        let payload = req?.body;
+        const image = req?.files?.image;
 
         if (!payload) {
             throw { statusCode: 400, message: "Invalid payload" };
@@ -108,11 +108,16 @@ exports.createCar = async (req, res, next) => {
 
 exports.updateCar = async (req, res, next) => {
     try {
-        const id = +req.params.id;
-        const payload = req.body;
+        const id = +req?.params?.id;
+        let payload = req?.body;
+        const image = req?.files?.image;
 
         if (isNaN(id)) {
             return res.status(400).json({ message: "Invalid id" });
+        }
+
+        if (!payload) {
+            throw { statusCode: 400, message: "Invalid payload" };
         }
 
         payload.rent_per_day = +payload.rent_per_day;
@@ -122,6 +127,11 @@ exports.updateCar = async (req, res, next) => {
         }
         payload.year = +payload.year;
         payload.availableAt = new Date(payload.availableAt);
+
+        payload = {
+            ...payload,
+            image,
+        };
 
         validateCar(payload);
 

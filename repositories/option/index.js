@@ -49,6 +49,24 @@ exports.getOptionByName = async (name) => {
 };
 
 exports.createOption = async (payload) => {
+    const existingOption = await Option.findOne({
+        where: {
+            name: payload.name,
+        },
+        paranoid: false, // ini akan mencari juga di data yang telah di-soft delete
+    });
+
+    if (existingOption) {
+        // Jika data sudah ada dan telah di-soft delete, maka kembalikan data tersebut
+        if (existingOption.deletedAt) {
+            await existingOption.restore();
+
+            const key = `option:${existingOption.id}`;
+            await saveToCache(key, existingOption, 300);
+
+            return existingOption;
+        }
+    }
     const data = await Option.create(payload);
 
     const key = `option:${data.id}`;

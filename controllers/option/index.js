@@ -34,6 +34,7 @@ exports.getOptionById = async (req, res, next) => {
 
 exports.createOption = async (req, res, next) => {
     try {
+        console.log("masuk");
         const payload = req.body;
 
         if (!payload) {
