@@ -23,6 +23,10 @@ app.use(express.static("public"));
 
 app.use("/api", routes);
 
+app.use("*", (req, res) => {
+    res.status(404).json({ error: "Not Found" });
+});
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
