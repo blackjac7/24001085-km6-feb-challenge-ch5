@@ -2,6 +2,11 @@ const jwt = require("jsonwebtoken");
 
 exports.getTokenFromHeaders = (headers) => {
     const { authorization } = headers;
+
+    if (!authorization) {
+        throw { statusCode: 401, message: "Unauthorized" };
+    }
+
     const splitToken = authorization.split(" ");
 
     if (splitToken.length !== 2) {
